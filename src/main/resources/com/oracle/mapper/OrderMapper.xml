@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oracle.dao.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.oracle.vo.Order">
+    <id column="OrderId" jdbcType="INTEGER" property="orderid" />
+    <result column="OrderCode" jdbcType="VARCHAR" property="ordercode" />
+    <result column="OrderDate" jdbcType="DATE" property="orderdate" />
+    <result column="OrderFlag" jdbcType="VARCHAR" property="orderflag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    OrderId, OrderCode, OrderDate, OrderFlag
+  </sql>
+  
+  <select id="getOrderByflag" parameterType="String" resultType="order">
+  select * from biz_order where OrderFlag=#{orderflag }
+  </select>
+  
+  <select id="getOrderByflagor" parameterType="String" resultType="order">
+  select * from biz_order where OrderFlag=#{one } or OrderFlag=#{two } or OrderFlag='3'
+  </select>
+  
+  
+  <select id="getOrderByOrderCodeorflag" resultType="Order">
+  select * from biz_order 
+  <where>
+  <if test="orderdate!=null and orderdate!=''">
+  and  DATE_FORMAT(Orderdate,'%Y-%m-%d')=#{orderdate }
+  </if>
+  <if test="ordercode!=null and ordercode!=''">
+  and OrderCode like concat('%',#{ordercode},'%')
+  </if>
+  <if test="orderflag!=null and orderflag!='' and orderflag!='5'">
+  and orderflag =#{orderflag}
+  </if>
+  </where> 
+
+  </select>
+  
+  <select id="getOrderByOrderCodeorflag2" resultType="Order">
+  select * from biz_order 
+  <where>
+  (OrderFlag='1' or OrderFlag='2')
+  <if test="orderdate!=null and orderdate!=''">
+  and  DATE_FORMAT(Orderdate,'%Y-%m-%d')=#{orderdate }
+  </if>
+  
+  <if test="ordercode!=null and ordercode!=''">
+  and OrderCode like concat('%',#{ordercode},'%')
+  </if>
+  <if test="orderflag!=null and orderflag!='' and orderflag!='5'">
+  and OrderFlag =#{orderflag}
+  </if>
+  </where> 
+
+  </select>
+  
+  <select id="getorderidByordercode" parameterType="String" resultType="Integer">
+  select OrderId from biz_order where OrderCode=#{ordercode }
+  </select>
+  
+  <update id="updateByorederid" parameterType="Integer">
+  	update biz_order set OrderFlag='1' where orderid=#{orderid }
+  </update>
+  
+  <update id="updateByorederid2" parameterType="Integer">
+  	update biz_order set OrderFlag='2' where orderid=#{orderid }
+  </update>
+  
+  <update id="updateByorederid3" parameterType="Integer">
+  	update biz_order set OrderFlag='3' where orderid=#{orderid }
+  </update>
+  
+  
+  <select id="getAll" resultType="Order">
+  select * from  biz_order 
+ 
+  </select>
+  
+  <select id="getOrderByorderid" parameterType="Integer" resultType="order">
+  	Select * from biz_order where orderid=#{orderid}
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from biz_order
+    where OrderId = #{orderid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from biz_order
+    where OrderId = #{orderid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.oracle.vo.Order">
+    insert into biz_order (OrderId, OrderCode, OrderDate, 
+      OrderFlag)
+    values (null, #{ordercode,jdbcType=VARCHAR}, #{orderdate,jdbcType=DATE}, 
+      #{orderflag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.oracle.vo.Order">
+    insert into biz_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        OrderId,
+      </if>
+      <if test="ordercode != null">
+        OrderCode,
+      </if>
+      <if test="orderdate != null">
+        OrderDate,
+      </if>
+      <if test="orderflag != null">
+        OrderFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        #{orderid,jdbcType=INTEGER},
+      </if>
+      <if test="ordercode != null">
+        #{ordercode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderdate != null">
+        #{orderdate,jdbcType=DATE},
+      </if>
+      <if test="orderflag != null">
+        #{orderflag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.oracle.vo.Order">
+    update biz_order
+    <set>
+      <if test="ordercode != null">
+        OrderCode = #{ordercode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderdate != null">
+        OrderDate = #{orderdate,jdbcType=DATE},
+      </if>
+      <if test="orderflag != null">
+        OrderFlag = #{orderflag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OrderId = #{orderid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.oracle.vo.Order">
+    update biz_order
+    set OrderCode = #{ordercode,jdbcType=VARCHAR},
+      OrderDate = #{orderdate,jdbcType=DATE},
+      OrderFlag = #{orderflag,jdbcType=VARCHAR}
+    where OrderId = #{orderid,jdbcType=INTEGER}
+  </update>
+</mapper>
