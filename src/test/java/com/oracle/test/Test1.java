@@ -12,6 +12,9 @@ import com.oracle.dao.PartsMapper;
 import com.oracle.dao.PartsRepBillMapper;
 import com.oracle.dao.PartsRepertoryMapper;
 
+/*
+ * @author:
+ */
 public class Test1 {
 	
 	ClassPathXmlApplicationContext c=new ClassPathXmlApplicationContext("applicationContext.xml");

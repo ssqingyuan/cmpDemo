@@ -14,7 +14,7 @@ public class Test2 {
 	public void test() {
 		System.out.println("kjsbfh");
 		PartsMapper dao=c.getBean(PartsMapper.class);
-		System.out.println(dao.getNameandCount());
+		System.out.println(dao.getAll());
 	}
 
 }
